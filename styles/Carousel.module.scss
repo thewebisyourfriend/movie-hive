@@ -1,0 +1,67 @@
+.navigation_wrapper {
+  @apply relative;
+}
+
+.arrow {
+  @apply w-8
+  h-8
+  top-1/2
+  absolute
+  cursor-pointer;
+
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  fill: #C4A80A;
+
+}
+
+.right {
+  @apply left-auto
+  right-0;
+}
+
+.right:hover {
+  @apply bg-gradient-to-r from-transparent to-black;
+}
+
+.left {
+  @apply left-0;
+}
+
+.left:hover {
+  @apply bg-gradient-to-l from-transparent to-black;
+}
+
+.left, .right {
+  @apply w-11
+  h-full
+  top-0
+  absolute
+  cursor-pointer;
+}
+
+.arrow_spinner_right {
+  @apply w-8
+  h-8
+  top-1/2
+  absolute
+  cursor-pointer
+  left-auto
+  right-1.5;
+
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+
+.arrow_left {
+  @apply left-1;
+}
+
+.arrow_right {
+  @apply left-auto
+  right-1;
+}
+
+.arrow_disabled {
+  fill: rgba(255, 255, 255, 0.5);
+}

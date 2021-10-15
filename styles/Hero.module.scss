@@ -1,0 +1,34 @@
+.hero {
+  @apply relative
+  overflow-hidden
+  w-full;
+
+  .content {
+    @apply z-10
+    leading-10
+    relative
+    p-4
+    m-4
+    mt-60
+    bg-black
+    bg-opacity-20
+    rounded-md;
+
+    @screen lg {
+      @apply w-2/4;
+    }
+  }
+
+  h1 {
+    @apply text-white
+    mb-8
+    text-5xl;
+  }
+
+  p {
+    @apply text-white
+    leading-9
+    text-xl;
+  }
+}
+
