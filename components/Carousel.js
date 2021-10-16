@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import Link from "next/link";
-import Image from "next/image";
 import CustomImage from "./CustomImage";
 import Loader from "react-loader-spinner";
 

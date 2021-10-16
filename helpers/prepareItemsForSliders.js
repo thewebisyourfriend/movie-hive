@@ -8,7 +8,7 @@ export function prepareMovieItems(movies) {
       imageUrl: `${BASE_IMAGE_POSTER}${movie.poster_path}`,
       title: movie.original_title,
       id: movie.id,
-      link: `/movie/${movie.id}`,
+      link: `/get/movie/${movie.id}`,
     };
   });
 }
@@ -19,7 +19,7 @@ export function prepareShowItems(shows) {
       imageUrl: `${BASE_IMAGE_POSTER}${show.poster_path}`,
       title: show.name,
       id: show.id,
-      link: `/show/${show.id}`,
+      link: `/get/show/${show.id}`,
     };
   });
 }

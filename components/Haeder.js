@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "../public/movie-hive.png";
 import styles from "../styles/Header.module.scss";
 
@@ -21,7 +22,11 @@ function Header() {
 
   return (
     <header className={`${styles.header} ${isDark && "bg-black"}`}>
-      <Image src={logo} alt="Movie Hive" width={180} height={37} quality={100} />
+      <Link href="/">
+        <a>
+          <Image src={logo} alt="Movie Hive" width={180} height={37} quality={100} />
+        </a>
+      </Link>
     </header>
   );
 }

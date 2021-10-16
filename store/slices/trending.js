@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 import TMDBConstants from "../../shared/routes/tmdbApi";
-import merge from "../../helpers/mergeArrays";
 
 const { TRENDING } = TMDBConstants;
 
@@ -75,7 +74,6 @@ const trendingSlice = createSlice({
     },
     [fetchTrendingMovies.fulfilled]: (state, action) => {
       state.movies = [...state.movies, ...action.payload.results];
-      console.log("length from slice", state.movies.length);
       state.moviesLastRecievedPage = action.payload.page;
       state.moviesTotalPages = action.payload.total_pages;
       state.moviesTotalResults = action.payload.total_results;
@@ -91,7 +89,7 @@ const trendingSlice = createSlice({
       state.showsIsLoading = true;
     },
     [fetchTrendingShows.fulfilled]: (state, action) => {
-      state.shows = merge(state.shows, action.payload.results, "id");
+      state.shows = [...state.shows, ...action.payload.results];
       state.showsLastRecievedPage = action.payload.page;
       state.showsTotalPages = action.payload.total_pages;
       state.showsTotalResults = action.payload.total_results;
