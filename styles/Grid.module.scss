@@ -1,0 +1,13 @@
+.container {
+  @apply grid 
+  grid-cols-2
+  gap-3;
+
+  @screen lg {
+    @apply grid-cols-4
+  }
+
+  @screen xl {
+    @apply grid-cols-8
+  }
+}

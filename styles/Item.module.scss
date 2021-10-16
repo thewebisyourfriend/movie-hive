@@ -1,0 +1,43 @@
+.heading {
+  @apply text-3xl
+  mb-6;
+}
+
+.section {
+  @apply my-5;
+}
+
+.row {
+  @apply mb-8;
+}
+
+.colWrapper {
+  @apply m-4
+  grid 
+  grid-cols-5
+  gap-3;
+}
+
+.infoCol {
+  @apply bg-white
+  bg-opacity-10
+  rounded-md
+  p-4
+  text-white
+  col-span-5;
+
+  @screen lg {
+    @apply col-span-1;
+  }
+}
+
+.mainCol {
+  @apply p-4
+  text-white
+  col-span-5;
+
+  @screen lg {
+    @apply col-span-4;
+  }
+  
+}

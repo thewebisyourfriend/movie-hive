@@ -1,7 +1,11 @@
 .hero {
   @apply relative
   overflow-hidden
+  flex
+  pt-20
   w-full;
+
+  min-height: 50vh;
 
   .content {
     @apply z-10
@@ -9,7 +13,7 @@
     relative
     p-4
     m-4
-    mt-60
+    mt-auto
     bg-black
     bg-opacity-20
     rounded-md;

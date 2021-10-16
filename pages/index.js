@@ -6,12 +6,15 @@ import React, { useState } from "react";
 import Hero from "../components/Hero";
 import Carousel from "../components/Carousel";
 import { prepareMovieItems, prepareShowItems } from "../helpers/prepareItemsForSliders";
+import TMDBConstants from "../shared/routes/tmdbApi";
+import heroImage from "../public/heroPlaceholder.png";
 
 export default function Home({ prepedMovieItems, prepedShowItems }) {
   const [movieItems, setMovieItems] = useState(prepedMovieItems);
   const [showItems, setShowItems] = useState(prepedShowItems);
   const dispatch = useDispatch();
 
+  const { BASE_IMAGE_HERO } = TMDBConstants;
   const {
     movies,
     moviesHasError,
@@ -65,7 +68,14 @@ export default function Home({ prepedMovieItems, prepedShowItems }) {
 
   return (
     <>
-      <Hero item={topItem} />
+      <Hero
+        title={topItem.media_type === "tv" ? topItem.name : topItem.original_title}
+        type={topItem.media_type === "tv" ? "show" : "movie"}
+        id={topItem.id}
+        imgPath={topItem.backdrop_path ? `${BASE_IMAGE_HERO}${topItem.backdrop_path}` : heroImage}
+        overview={topItem.overview}
+        isItemPage={false}
+      />
       <section className={styles.section}>
         <h2 className={styles.heading}>Trending Movies</h2>
         {moviesHasError && (

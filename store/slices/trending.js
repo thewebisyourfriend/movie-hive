@@ -7,13 +7,14 @@ const { TRENDING } = TMDBConstants;
 export const fetchTrendingMovies = createAsyncThunk("trending/fetchTrendingMovies", async (page, { rejectWithValue }) => {
   try {
     const response = await fetch(`${TRENDING.MOVIES}&page=${page}`);
+    const json = await response.json();
     if (!response.ok) {
       throw {
         status: response.status,
-        statusText: response.statusText,
+        statusText: json.status_message,
       };
     }
-    return await response.json();
+    return json;
   } catch (err) {
     return rejectWithValue(err);
   }
@@ -22,13 +23,14 @@ export const fetchTrendingMovies = createAsyncThunk("trending/fetchTrendingMovie
 export const fetchTrendingShows = createAsyncThunk("trending/fetchTrendingShows", async (page, { rejectWithValue }) => {
   try {
     const response = await fetch(`${TRENDING.SHOWS}&page=${page}`);
+    const json = await response.json();
     if (!response.ok) {
       throw {
         status: response.status,
-        statusText: response.statusText,
+        statusText: json.status_message,
       };
     }
-    return await response.json();
+    return json;
   } catch (err) {
     return rejectWithValue(err);
   }
