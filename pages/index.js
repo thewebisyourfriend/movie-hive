@@ -25,6 +25,7 @@ export default function Home({ prepedMovieItems, prepedShowItems }) {
     moviesTotalResults,
     shows,
     showsHasError,
+    showsErrorObject,
     showsIsLoading,
     showsLastRecievedPage,
     showsTotalPages,

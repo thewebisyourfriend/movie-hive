@@ -99,7 +99,7 @@ function getShowCertificate(results) {
     .find((el) => {
       return el.iso_3166_1 === "GB";
     });
-  return atingObj === undefined || ratingObj.rating === "" ? "No Certification Found" : `${ratingObj.rating} (${ratingObj.iso_3166_1})`;
+  return ratingObj === undefined || ratingObj.rating === "" ? "No Certification Found" : `${ratingObj.rating} (${ratingObj.iso_3166_1})`;
 }
 
 function getMovieCertificate(results) {
@@ -149,6 +149,18 @@ function prepareCastItems(items) {
       title: `Name: ${item.name}`,
       additional: [{ id: 1, text: `Character: ${item.character}` }],
       id: item.id,
+    };
+  });
+}
+
+export function prepareSearchItems(items, type) {
+  if (!items.length) return [];
+  return items.map((item) => {
+    return {
+      imageUrl: item.poster_path ? `${BASE_IMAGE_POSTER}${item.poster_path}` : cardIamge,
+      title: type === "show" ? item.name : item.original_title,
+      id: item.id,
+      link: `/get/${type}/${item.id}`,
     };
   });
 }

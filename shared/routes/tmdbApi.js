@@ -27,5 +27,3 @@ export default Object.freeze({
     },
   },
 });
-
-//https://api.themoviedb.org/3/movie/157336?api_key=adce0ce3d9660099f2ec8345438ceeb4&language=en-US&page=1&append_to_response=recommendations,images,videos,reviews
