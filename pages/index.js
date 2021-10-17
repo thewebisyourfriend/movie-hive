@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import React, { useState } from "react";
 import Hero from "../components/Hero";
 import Carousel from "../components/Carousel";
-import { prepareMovieItems, prepareShowItems } from "../helpers/prepareItemsForSliders";
+import { prepareMovieItems, prepareShowItems } from "../helpers/prepareData";
 import TMDBConstants from "../shared/routes/tmdbApi";
 import heroImage from "../public/heroPlaceholder.png";
 
