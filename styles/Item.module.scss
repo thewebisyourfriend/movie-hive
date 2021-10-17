@@ -27,6 +27,10 @@
   col-span-6;
 
   @screen lg {
+    @apply col-span-2;
+  }
+
+  @screen xl {
     @apply col-span-1;
   }
 
@@ -42,6 +46,10 @@
   col-span-6;
 
   @screen lg {
+    @apply col-span-4;
+  }
+
+  @screen xl {
     @apply col-span-5;
   }
 }
@@ -51,10 +59,17 @@
   items-center
   flex-wrap;
 
+  .progressBar {
+      @apply w-1/4;
+
+      @screen xl {
+        max-width:80%;
+      }
+    }
+
   .voteItem {
-    @apply w-1/2
-    px-4
-    text-center;
+    @apply w-3/4
+    pl-4;
 
     h2 {
       @apply text-2xl

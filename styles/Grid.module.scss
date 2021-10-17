@@ -4,10 +4,10 @@
   gap-3;
 
   @screen lg {
-    @apply grid-cols-4
+    @apply grid-cols-6
   }
 
   @screen xl {
-    @apply grid-cols-8
+    @apply grid-cols-10
   }
 }

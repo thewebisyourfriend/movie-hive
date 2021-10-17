@@ -18,7 +18,7 @@ export default function Item({ item, type }) {
         <section className={styles.infoCol}>
           <div className={styles.voteWrapper}>
             <CircularProgressbar
-              className={styles.voteItem}
+              className={styles.progressBar}
               value={vote}
               text={`${vote}%`}
               strokeWidth={4}
