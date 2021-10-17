@@ -1,8 +1,19 @@
 import TMDBConstants from "../shared/routes/tmdbApi";
 import cardIamge from "../public/cardPlaceholder.png";
 import heroIamge from "../public/heroPlaceholder.png";
+import { ToWords } from "to-words";
 
-const { BASE_IMAGE_HERO, BASE_IMAGE_POSTER, BASE_IMAGE_PROFILE } = TMDBConstants;
+const toWords = new ToWords({
+  localeCode: "en-US",
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: true,
+  },
+});
+
+const { BASE_IMAGE_HERO, BASE_IMAGE_POSTER, BASE_IMAGE_PROFILE, BASE_IMAGE_LOGO } = TMDBConstants;
 
 export function prepareMovieItems(movies) {
   return movies.map((movie) => {
@@ -18,7 +29,7 @@ export function prepareMovieItems(movies) {
 export function prepareShowItems(shows) {
   return shows.map((show) => {
     return {
-      imageUrl: shows.poster_path ? `${BASE_IMAGE_POSTER}${show.poster_path}` : cardIamge,
+      imageUrl: show.poster_path ? `${BASE_IMAGE_POSTER}${show.poster_path}` : cardIamge,
       title: show.name,
       id: show.id,
       link: `/get/show/${show.id}`,
@@ -26,12 +37,12 @@ export function prepareShowItems(shows) {
   });
 }
 
-export function prepareDataForShows(data) {
+export function prepareDataForShow(data) {
   return {
     title: data.name,
     type: "show",
     id: data.id,
-    imgPath: data.backdrop_path ? `${BASE_IMAGE_HERO}${data.backdrop_path}` : heroImage,
+    imgPath: data.backdrop_path ? `${BASE_IMAGE_HERO}${data.backdrop_path}` : heroIamge,
     overview: data.overview,
     vote: data.vote_average,
     releaseDate: new Date(data.first_air_date).toDateString(),
@@ -53,12 +64,53 @@ export function prepareDataForShows(data) {
   };
 }
 
+export function prepareDataForMovie(data) {
+  return {
+    title: data.original_title,
+    type: "show",
+    id: data.id,
+    imgPath: data.backdrop_path ? `${BASE_IMAGE_HERO}${data.backdrop_path}` : heroIamge,
+    overview: data.overview,
+    vote: data.vote_average,
+    releaseDate: new Date(data.release_date).toDateString(),
+    releaseYear: new Date(data.release_date).getFullYear(),
+    certificate: getMovieCertificate(data.release_dates.results),
+    budget: data.budget && data.budget > 0 ? toWords.convert(data.budget) : null,
+    revenue: data.revenue && data.revenue > 0 ? toWords.convert(data.revenue) : null,
+    production_companies: getProductionOrNetwork(data.production_companies),
+    status: data.status,
+    genres: data.genres,
+    run_time: data.runtime,
+    cast: prepareCastItems(data.credits.cast),
+    recommendations: {
+      page: data.recommendations.page,
+      total_pages: data.recommendations.total_pages,
+      total_results: data.recommendations.total_results,
+      results: prepareRecommendationItems(data.recommendations.results),
+    },
+  };
+}
+
 function getShowCertificate(results) {
-  const ratingObj =
-    results.find((el) => {
+  const ratingObj = results
+    .filter((el) => {
       return el.iso_3166_1 === "US" || el.iso_3166_1 === "GB";
-    }) || {};
-  return Object.keys(ratingObj).length === 0 ? "No Certification Found" : ratingObj.rating;
+    })
+    .find((el) => {
+      return el.iso_3166_1 === "GB";
+    });
+  return atingObj === undefined || ratingObj.rating === "" ? "No Certification Found" : `${ratingObj.rating} (${ratingObj.iso_3166_1})`;
+}
+
+function getMovieCertificate(results) {
+  const ratingObj = results
+    .filter((el) => {
+      return el.iso_3166_1 === "US" || el.iso_3166_1 === "GB";
+    })
+    .find((el) => {
+      return el.iso_3166_1 === "GB";
+    });
+  return ratingObj === undefined || ratingObj.release_dates[0].certification === "" ? "No Certification Found" : `${ratingObj.release_dates[0].certification} (${ratingObj.iso_3166_1})`;
 }
 
 function getProductionOrNetwork(items) {
@@ -66,7 +118,7 @@ function getProductionOrNetwork(items) {
   return items.map((item) => {
     return {
       ...item,
-      logo_path: `${BASE_IMAGE_LOGO}${item.logo_path}`,
+      logo_path: item.logo_path !== null ? `${BASE_IMAGE_LOGO}${item.logo_path}` : null,
     };
   });
 }

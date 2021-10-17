@@ -1,9 +1,11 @@
 import { wrapper } from "../store";
 import Error from "next/error";
 import Layout from "../components/Layout";
+import "../styles/tailwind.css";
 import "../styles/globals.scss";
 import "keen-slider/keen-slider.scss";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import "react-circular-progressbar/dist/styles.css";
 
 function App({ Component, pageProps }) {
   if (pageProps.error) {
