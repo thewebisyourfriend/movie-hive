@@ -26,4 +26,5 @@ export default Object.freeze({
       return `${API_BASE}/tv/${id}?api_key=${API_SECRET}&append_to_response=content_ratings,recommendations,credits`;
     },
   },
+  SEARCH: (type, query) => `${API_BASE}/search/${type}?api_key=${API_SECRET}&query=${query}`,
 });

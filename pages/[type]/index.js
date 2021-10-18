@@ -2,16 +2,26 @@ import { wrapper } from "../../store";
 import styles from "../../styles/Type.module.scss";
 import { fetchMovieGenres, fetchShowGenres, genresSelector } from "../../store/slices/genres";
 import { useSelector } from "react-redux";
-import React, { useState } from "react";
-import Grid from "../../components/Grid";
+import React, { useState, useEffect } from "react";
 import { prepareSearchItems } from "../../helpers/prepareData";
 import TMDBConstants from "../../shared/routes/tmdbApi";
+import Search from "../../components/Search";
+import queryString from "../../helpers/addQueryString";
 
-const { DISCOVER } = TMDBConstants;
+function shapeData(data, type) {
+  const formattedResults = prepareSearchItems(data.results, type);
+  return {
+    ...data,
+    results: formattedResults,
+  };
+}
 
-export default function Type({ type, discoverServerItems }) {
+const { DISCOVER, SEARCH } = TMDBConstants;
+
+export default function Type({ type, discoverServerItems, initialUrl }) {
+  const [url, setUrl] = useState(initialUrl);
   const [searchItems, setSearchItems] = useState({});
-  const [searchQuery, setSearchQuery] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState({});
   const [selectedYear, setSelectedYear] = useState("");
   const [currentGenreItems, setCurrentGenreItems] = useState({});
@@ -21,6 +31,31 @@ export default function Type({ type, discoverServerItems }) {
   const genres = type === "movies" ? movieGenres : showGenres;
   const genresHasError = type === "movies" ? moviesHasError : showsHasError;
   const genresHasErrorObject = type === "movies" ? moviesErrorObject : showsErrorObject;
+
+  function newURL() {
+    const searchType = type === "shows" ? "tv" : "movie";
+    if (searchQuery.length) return SEARCH(searchType, searchQuery);
+
+    const urlParams = {};
+    if (Object.keys(selectedGenre).length > 0) urlParams.with_genres = selectedGenre.id;
+    if (selectedYear.length) urlParams.primary_release_year = seleselectedYearctedGenre;
+
+    return queryString(DISCOVER[type.toUpperCase()], urlParams);
+  }
+
+  function selectGenre(id) {
+    const genreObj = genres.find((x) => x.id === id);
+    setSearchQuery("");
+    setSelectedGenre(genreObj);
+  }
+
+  function formatData(data) {
+    return shapeData(data, type);
+  }
+
+  useEffect(() => {
+    setUrl(newURL());
+  }, [selectedGenre, selectedYear, searchQuery]);
 
   return (
     <>
@@ -36,7 +71,7 @@ export default function Type({ type, discoverServerItems }) {
       {Object.keys(searchItems).length > 0 && (
         <section>
           <a>Back</a>
-          <Grid />
+          {/* <Grid /> */}
         </section>
       )}
       {Object.keys(searchItems).length === 0 && (
@@ -50,14 +85,16 @@ export default function Type({ type, discoverServerItems }) {
             {genres.length > 0 && (
               <ul>
                 {genres.map((genre) => (
-                  <li key={genre.id}>{genre.name}</li>
+                  <li key={genre.id} onClick={() => selectGenre(genre.id)}>
+                    {genre.name}
+                  </li>
                 ))}
               </ul>
             )}
           </section>
           <section className={styles.mainCol}>
             <h2 className={styles.heading}>Discover the latest {type}</h2>
-            <Grid items={discoverItems.results} />
+            <Search initialData={discoverItems} initialUrl={initialUrl} url={url} shapeData={formatData} />
           </section>
         </div>
       )}
@@ -96,18 +133,14 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     };
   }
 
-  const discover = {
-    page: itemJson.page,
-    total_pages: itemJson.total_pages,
-    total_results: itemJson.total_results,
-    results: prepareSearchItems(itemJson.results, type),
-  };
+  const discover = shapeData(itemJson, type);
 
   return {
     props: {
       error,
       type,
       discoverServerItems: discover,
+      initialUrl: URL,
     },
   };
 });

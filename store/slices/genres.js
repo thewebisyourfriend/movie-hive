@@ -21,7 +21,6 @@ export const fetchMovieGenres = createAsyncThunk("genres/fetchMovieGenres", asyn
 });
 
 export const fetchShowGenres = createAsyncThunk("genres/fetchShowGenres", async (page, { rejectWithValue }) => {
-  console.log(GENRES.SHOWS);
   try {
     const response = await fetch(GENRES.SHOWS);
     const json = await response.json();

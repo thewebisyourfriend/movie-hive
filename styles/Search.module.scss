@@ -1,0 +1,34 @@
+$button-background: #ad9401;
+$button-text-color: #000;
+
+.controls {
+    @apply flex
+    items-start
+    mt-4
+    flex-row;
+}
+
+.btn {
+    @apply font-bold 
+    py-2 
+    px-4 
+    rounded;
+
+    background: #C4A80A;
+    color: $button-text-color;
+
+    &.end {
+        margin-left: auto;
+    }
+  }
+
+  .btn:hover {
+    background: #ad9401;
+  }
+
+    .btn:disabled {
+    @apply pointer-events-none;
+
+    background: rgba(#fff, .3);
+    color: lighten($button-text-color, 20%);
+  }

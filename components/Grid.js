@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import CustomImage from "./CustomImage";
 import Link from "next/link";
 import styles from "../styles/Grid.module.scss";

@@ -154,13 +154,19 @@ function prepareCastItems(items) {
 }
 
 export function prepareSearchItems(items, type) {
+  const types = {
+    show: "show",
+    shows: "show",
+    movie: "movie",
+    movies: "movie",
+  };
   if (!items.length) return [];
   return items.map((item) => {
     return {
       imageUrl: item.poster_path ? `${BASE_IMAGE_POSTER}${item.poster_path}` : cardIamge,
-      title: type === "show" ? item.name : item.original_title,
+      title: types[type] === "show" ? item.name : item.original_title,
       id: item.id,
-      link: `/get/${type}/${item.id}`,
+      link: `/get/${types[type]}/${item.id}`,
     };
   });
 }

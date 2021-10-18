@@ -1,73 +1,32 @@
 import { wrapper } from "../store";
 import React, { useState, useEffect } from "react";
-import useSWR from "swr";
+import Search from "../components/Search";
+import { prepareSearchItems } from "../helpers/prepareData";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+function shapeData(data, type) {
+  const setType = type === undefined ? "movie" : type;
+  const formattedResults = prepareSearchItems(data.results, setType);
+  return {
+    ...data,
+    results: formattedResults,
+  };
+}
 
 export default function Test({ dataSet, initialUrl }) {
-  const [pageIndex, setPageIndex] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [gridData, setGridData] = useState(dataSet.results);
   const [url, setUrl] = useState("https://api.themoviedb.org/3/discover/movie?api_key=adce0ce3d9660099f2ec8345438ceeb4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false");
 
-  const { data, error } = useSWR(`${url}&page=${pageIndex}`, fetcher, {
-    fallbackData: url === initialUrl ? dataSet : null,
-  });
-
   function changeUrl() {
-    const newUrl =
-      "https://api.themoviedb.org/3/discover/movie?api_key=adce0ce3d9660099f2ec8345438ceeb4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&primary_release_year=1960";
-
-    if (url !== newUrl) {
-      setLoading(true);
-      setPageIndex(1);
-      setUrl(newUrl);
-    } else {
-      console.log("same");
-    }
+    setUrl(
+      "https://api.themoviedb.org/3/discover/movie?api_key=adce0ce3d9660099f2ec8345438ceeb4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&primary_release_year=1960"
+    );
   }
-
-  function changePage(num) {
-    setLoading(true);
-    setPageIndex(num);
-  }
-
-  function setData(datas) {
-    return datas.map((d) => {
-      return {
-        ...d,
-        original_title: d.original_title + " new",
-      };
-    });
-  }
-
-  useEffect(() => {
-    if (data !== null) {
-      setGridData(setData(data.results));
-    } else {
-      setGridData([]);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    setTimeout(function () {
-      setLoading(false);
-    }, 3000);
-  }, [gridData]);
-
-  if (error) return "An error has occurred.";
-  if (!gridData || loading) return "Loading...";
 
   return (
-    <div>
-      {gridData.map((item) => (
-        <div key={item.id}>{item.original_title}</div>
-      ))}
-      <div>
-        <button onClick={() => changePage(pageIndex - 1)}>Previous</button>
-        <button onClick={() => changePage(pageIndex + 1)}>Next</button>
-        <button onClick={() => changeUrl()}>New URL</button>
-      </div>
+    <div style={{ background: "white", padding: "20px", marginTop: "80px" }}>
+      <Search initialData={dataSet} initialUrl={initialUrl} url={url} shapeData={shapeData} />
+      <br />
+      <br />
+      <button onClick={() => changeUrl()}>New URL</button>
     </div>
   );
 }
@@ -414,10 +373,11 @@ const dummy = {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
+  const data = shapeData(dummy, "movie");
   return {
     props: {
       initialUrl: "https://api.themoviedb.org/3/discover/movie?api_key=adce0ce3d9660099f2ec8345438ceeb4&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false",
-      dataSet: dummy,
+      dataSet: data,
     },
   };
 });
