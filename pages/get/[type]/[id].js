@@ -6,6 +6,7 @@ import { prepareDataForShow, prepareDataForMovie } from "../../../helpers/prepar
 import Grid from "../../../components/Grid";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import CustomImage from "../../../components/CustomImage";
+import CustomHead from "../../../components/CustomHead";
 
 const { GET } = TMDBConstants;
 
@@ -13,6 +14,7 @@ export default function Item({ item, type }) {
   const vote = Math.round((item.vote / 10) * 100);
   return (
     <>
+      <CustomHead title={`${item.title} - Movie Hive`} description={`${type} search powered by TMDB.`} />
       <Hero title={`${item.title} (${item.releaseYear})`} type={type} id={item.id} imgPath={item.imgPath} overview={item.overview} isItemPage={true} />
       <div className={styles.colWrapper}>
         <section className={styles.infoCol}>

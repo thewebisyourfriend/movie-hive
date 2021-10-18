@@ -7,6 +7,7 @@ import { prepareSearchItems } from "../../helpers/prepareData";
 import TMDBConstants from "../../shared/routes/tmdbApi";
 import Search from "../../components/Search";
 import queryString from "../../helpers/addQueryString";
+import CustomHead from "../../components/CustomHead";
 
 function shapeData(data, type) {
   const formattedResults = prepareSearchItems(data.results, type);
@@ -62,6 +63,7 @@ export default function Type({ type, discoverServerItems, initialUrl, years }) {
 
   return (
     <>
+      <CustomHead title={`${type} - Movie Hive`} description={`${type} search powered by TMDB.`} />
       <div>
         <div className={styles.header}>
           <div className={styles.searchBar}>

@@ -1,13 +1,11 @@
 import Head from "next/head";
 
-function CustomHead({ pageTitle, pageDescription }) {
+function CustomHead({ title, description }) {
   return (
-    <>
       <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
-    </>
   );
 }
 

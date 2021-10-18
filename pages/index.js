@@ -8,6 +8,7 @@ import Carousel from "../components/Carousel";
 import { prepareMovieItems, prepareShowItems } from "../helpers/prepareData";
 import TMDBConstants from "../shared/routes/tmdbApi";
 import heroImage from "../public/heroPlaceholder.png";
+import CustomHead from "../components/CustomHead";
 
 export default function Home({ prepedMovieItems, prepedShowItems }) {
   const [movieItems, setMovieItems] = useState(prepedMovieItems);
@@ -69,6 +70,7 @@ export default function Home({ prepedMovieItems, prepedShowItems }) {
 
   return (
     <>
+      <CustomHead title="Movie Hive" description="Movie and Show search powered by TMDB." />
       <Hero
         title={topItem.media_type === "tv" ? topItem.name : topItem.original_title}
         type={topItem.media_type === "tv" ? "show" : "movie"}
