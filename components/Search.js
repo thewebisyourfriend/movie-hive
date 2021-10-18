@@ -32,7 +32,6 @@ function Search({ initialData, initialUrl, url, shapeData }) {
 
   useEffect(() => {
     if (data !== null) {
-      console.log("data", data);
       setTotalPages(data.total_pages);
       setGridData(shapeData(data).results);
     } else {

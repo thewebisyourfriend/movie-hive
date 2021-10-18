@@ -16,7 +16,6 @@ function Header() {
   };
 
   useEffect(() => {
-    console.log(router)
   }, [router]);
 
   useEffect(() => {

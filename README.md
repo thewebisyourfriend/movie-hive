@@ -1,6 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Movie Hive - Movie and show search powered by TMDB
+
+In order to get this site running please create an .env.local file that include the property: NEXT_PUBLIC_TMDB_SECRET equal to your API key for TMDB.
+
+This project has been built with Next.js and Redux. The idea behind this project was to create a site that is server side rendered and then rehydrated with new information on the client side. The reason Redux was chosen was because I wanted to share some information between pages of the site, and would have been a useful experiment as Redux would be more useful on a larger site. Unfortunatly while Redux is being used, there was lots of issues getting it to work with Next.js - which seems like a common problem many face, with no solutions that work found on the internet.
+
+### Improvements
+
+There are many things that could be improved and continued to develop, some are:
+
+- Getting Redux working correctly (data is being overidden when on rehydration on page change) - this involves a lot more research as there are no working examples of this and many people are facing the same issues.
+- API calls could be all backend routes in order to mask the API key to the browser (a basic example of a route is included in the project under pages/api/trending)
+- Pushing categories, search criteria to the router and url so that we can capture the data when using the browser navigation. This data could then be used to rehydrate the state to match the url (this data would already be there if Redux was working)
+- Use NextAuth to login users to their own TMDB account so that the site has the ability to view personal lists etc
+- Creating tests for pages, components and routes (I know this should be done while developing for TDD, however I have only little experience with writing them currently so I will come back to doing this as a learning exercise in the future)
+
+This will be treated as a continuous project to come back to and improve.
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 
