@@ -18,13 +18,12 @@ function shapeData(data, type) {
 
 const { DISCOVER, SEARCH } = TMDBConstants;
 
-export default function Type({ type, discoverServerItems, initialUrl }) {
+export default function Type({ type, discoverServerItems, initialUrl, years }) {
   const [url, setUrl] = useState(initialUrl);
-  const [searchItems, setSearchItems] = useState({});
+  const [searchUrl, setSearchUrl] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState({});
   const [selectedYear, setSelectedYear] = useState("");
-  const [currentGenreItems, setCurrentGenreItems] = useState({});
   const [discoverItems, setDiscoverItems] = useState(discoverServerItems);
   const { movieGenres, showGenres, moviesHasError, moviesErrorObject, showsHasError, showsErrorObject } = useSelector(genresSelector);
 
@@ -34,19 +33,23 @@ export default function Type({ type, discoverServerItems, initialUrl }) {
 
   function newURL() {
     const searchType = type === "shows" ? "tv" : "movie";
-    if (searchQuery.length) return SEARCH(searchType, searchQuery);
+    if (searchQuery.length) setSearchUrl(SEARCH(searchType, searchQuery));
 
     const urlParams = {};
     if (Object.keys(selectedGenre).length > 0) urlParams.with_genres = selectedGenre.id;
-    if (selectedYear.length) urlParams.primary_release_year = seleselectedYearctedGenre;
+    if (selectedYear.length) urlParams.primary_release_year = selectedYear;
 
     return queryString(DISCOVER[type.toUpperCase()], urlParams);
   }
 
   function selectGenre(id) {
-    const genreObj = genres.find((x) => x.id === id);
     setSearchQuery("");
-    setSelectedGenre(genreObj);
+    if (id) {
+      const genreObj = genres.find((x) => x.id === id);
+      setSelectedGenre(genreObj);
+    } else {
+      setSelectedGenre({});
+    }
   }
 
   function formatData(data) {
@@ -55,45 +58,64 @@ export default function Type({ type, discoverServerItems, initialUrl }) {
 
   useEffect(() => {
     setUrl(newURL());
-  }, [selectedGenre, selectedYear, searchQuery]);
+  }, [selectedGenre, selectedYear]);
 
   return (
     <>
       <div>
-        <br />
-        <br />
-        <br />
-        <h1>
-          {type} {Object.keys(selectedGenre).length > 0 && <span>({selectedGenre.name})</span>}
-        </h1>
-        <input type="text" /> <button>Search</button>
+        <div className={styles.header}>
+          <div className={styles.searchBar}>
+            <input type="text" placeholder={`Search ${type}`} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <button onClick={(e) => newURL()} disabled={!searchQuery.length}>
+              Search {type}
+            </button>
+          </div>
+        </div>
       </div>
-      {Object.keys(searchItems).length > 0 && (
-        <section>
-          <a>Back</a>
-          {/* <Grid /> */}
+      {searchUrl.length > 0 && (
+        <section className={styles.searchResults}>
+          <Search url={searchUrl} shapeData={formatData} />
         </section>
       )}
-      {Object.keys(searchItems).length === 0 && (
+      {!searchUrl.length && (
         <div className={styles.colWrapper}>
           <section className={styles.genreCol}>
+            <h2 className={styles.sideHeading}>Year</h2>
+            <select className={styles.yearSelect} onChange={(e) => setSelectedYear(e.target.value)}>
+              <option value="">Select a year...</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
             {genresHasError && (
               <p>
                 {genresHasErrorObject.status} - {genresHasErrorObject.statusText}
               </p>
             )}
             {genres.length > 0 && (
-              <ul>
-                {genres.map((genre) => (
-                  <li key={genre.id} onClick={() => selectGenre(genre.id)}>
-                    {genre.name}
+              <div className={styles.genres}>
+                <h2 className={styles.sideHeading}>Genres</h2>
+                <ul>
+                  <li className={Object.keys(selectedGenre).length === 0 ? `${styles.genreItem} ${styles.selected}` : styles.genreItem} onClick={() => selectGenre()}>
+                    All
                   </li>
-                ))}
-              </ul>
+                  {genres.map((genre) => {
+                    const itemClass = genre.id === selectedGenre.id ? `${styles.genreItem} ${styles.selected}` : styles.genreItem;
+                    return (
+                      <li className={itemClass} key={genre.id} onClick={() => selectGenre(genre.id)}>
+                        {genre.name}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             )}
           </section>
           <section className={styles.mainCol}>
-            <h2 className={styles.heading}>Discover the latest {type}</h2>
+            {Object.keys(selectedGenre).length === 0 && <h1 className={styles.heading}>Discover the latest {type}</h1>}
+            {Object.keys(selectedGenre).length > 0 && <h1 className={styles.heading}>{selectedGenre.name}</h1>}
             <Search initialData={discoverItems} initialUrl={initialUrl} url={url} shapeData={formatData} />
           </section>
         </div>
@@ -135,17 +157,22 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
   const discover = shapeData(itemJson, type);
 
+  //hacky way of getting years as I am having difficulties getting a calendar plugin to work with css modules
+  const firstYear = new Date("1920").getFullYear();
+  const today = new Date().getFullYear();
+  const arr = [];
+
+  for (let i = firstYear; i <= today; i++) {
+    arr.push(i);
+  }
+
   return {
     props: {
       error,
       type,
       discoverServerItems: discover,
       initialUrl: URL,
+      years: arr.reverse(),
     },
   };
 });
-
-//if search items show search grid with back back button,
-//back button clicked get rid of query and saerch items
-//if no search items, show 2 col for categories and year
-//store categories lists in redux, store

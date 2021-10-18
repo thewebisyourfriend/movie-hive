@@ -4,7 +4,7 @@ $button-text-color: #000;
 .controls {
     @apply flex
     items-start
-    mt-4
+    mt-6
     flex-row;
 }
 
@@ -20,15 +20,27 @@ $button-text-color: #000;
     &.end {
         margin-left: auto;
     }
-  }
+}
 
   .btn:hover {
     background: #ad9401;
   }
 
-    .btn:disabled {
+.btn:disabled {
     @apply pointer-events-none;
 
     background: rgba(#fff, .3);
     color: lighten($button-text-color, 20%);
-  }
+}
+
+.spinner {
+    @apply flex
+    justify-center
+    items-center
+    h-full;
+}
+
+.noResults {
+    @apply text-center;
+}
+

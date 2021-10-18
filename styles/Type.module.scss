@@ -34,10 +34,14 @@
     @apply col-span-1;
   }
 
-  h2 {
+  .sideHeading {
     @apply text-2xl
-    py-4;
-    }
+    mb-4;
+  }
+
+  .genres {
+    @apply mt-8;
+  }
 }
 
 .mainCol {
@@ -52,4 +56,83 @@
   @screen xl {
     @apply col-span-5;
   }
+}
+
+.searchResults {
+  @apply p-4
+  text-white;
+}
+
+.genreItem {
+  @apply text-xl
+  cursor-pointer
+  mb-6;
+
+  &.selected {
+    @apply pl-3
+    font-bold;
+
+    color: #ad9401;
+  }
+}
+
+.header {
+    @apply 
+    flex 
+    flex-col 
+    items-center 
+    mt-20
+    mb-16;
+}
+
+.searchBar {
+  @apply flex
+  px-3
+  w-full;
+
+  @screen xl {
+      @apply w-3/5;
+    }
+
+  input {
+    @apply outline-none 
+    p-2
+    rounded-l 
+    w-10/12;
+
+    @screen xl {
+      @apply w-10/12
+      p-4;
+    }
+
+    border: 1px solid #ad9401;
+  }
+
+  button {
+    @apply text-white
+    font-bold
+    text-lg
+    p-2
+    rounded-r;
+
+    @screen xl {
+      @apply p-4;
+    }
+
+    background: #ad9401;
+
+    &:hover {
+      background: #ad9401;
+    }
+  }
+}
+
+.yearSelect {
+  @apply py-2 
+  outline-none 
+  px-2 
+  text-black
+  rounded;
+
+  border: 1px solid #ad9401;
 }

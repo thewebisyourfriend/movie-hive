@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 import Grid from "./Grid";
 import styles from "../styles/Search.module.scss";
+import Loader from "react-loader-spinner";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 function Search({ initialData, initialUrl, url, shapeData }) {
   const [pageIndex, setPageIndex] = useState(1);
-  const [totalPages, setTotalPages] = useState(initialData.total_pages);
+  const [totalPages, setTotalPages] = useState(initialData ? initialData.total_pages : 0);
   const [loading, setLoading] = useState(false);
-  const [gridData, setGridData] = useState(initialData.results);
-  const [searchUrl, setSearchUrl] = useState(initialUrl);
+  const [gridData, setGridData] = useState(initialData ? initialData.results : []);
+  const [searchUrl, setSearchUrl] = useState(initialUrl ? initialUrl : url);
 
   const { data, error } = useSWR(`${url}&page=${pageIndex}`, fetcher, {
     fallbackData: searchUrl === initialUrl ? initialData : null,
@@ -31,6 +32,7 @@ function Search({ initialData, initialUrl, url, shapeData }) {
 
   useEffect(() => {
     if (data !== null) {
+      console.log("data", data);
       setTotalPages(data.total_pages);
       setGridData(shapeData(data).results);
     } else {
@@ -39,11 +41,27 @@ function Search({ initialData, initialUrl, url, shapeData }) {
   }, [data]);
 
   useEffect(() => {
-    setLoading(false);
+    if (gridData) {
+      setTimeout(function () {
+        setLoading(false);
+      }, 500);
+    }
   }, [gridData]);
 
   if (error) return "An error has occurred.";
-  if (!gridData || loading) return "Loading...";
+  if (!gridData || loading)
+    return (
+      <div className={styles.spinner}>
+        <Loader type="Oval" color="#C4A80A" height={200} width={200} />
+      </div>
+    );
+  if (gridData.length === 0) {
+    return (
+      <div className={styles.noResults}>
+        <p>No results found</p>
+      </div>
+    );
+  }
 
   return (
     <div>

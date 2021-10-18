@@ -1,11 +1,23 @@
 .header {
   @apply flex
-    justify-between
     p-4
     pl-5
     fixed
     top-0
     w-full
     transition-all
+    text-white
+    content-center
+    items-center
+    text-xl
+    font-bold
     z-20;
+
+    .link {
+      @apply ml-10;
+
+      &.active {
+        color: #C4A80A;
+      }
+    }
 }
