@@ -53,9 +53,14 @@ const genresSlice = createSlice({
   reducers: {},
   extraReducers: {
     [HYDRATE]: (state, action) => {
+      const hydrateData = action.payload.genres;
+      //return newState only if state is initial state
+      if (hydrateData.movieGenres.length < state.movieGenres.length && hydrateData.showGenres.length < state.showGenres.length) {
+        return state;
+      }
       return {
         ...state,
-        ...action.payload.genres,
+        ...hydrateData,
       };
     },
     [fetchMovieGenres.pending]: (state, action) => {

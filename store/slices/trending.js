@@ -66,9 +66,14 @@ const trendingSlice = createSlice({
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
+      const hydrateData = action.payload.trending;
+      //return newState only if state is initial state
+      if (hydrateData.movies.length < state.movies.length && hydrateData.shows.length < state.shows.length) {
+        return state;
+      }
       return {
         ...state,
-        ...action.payload.trending,
+        ...hydrateData,
       };
     },
     [fetchTrendingMovies.pending]: (state, action) => {
